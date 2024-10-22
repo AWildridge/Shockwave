@@ -1,4 +1,8 @@
-#Build artifacts and data files
+# Build artifacts and data files
 *.pt
 *.npy
 *.pkl
+
+# Directories storing data and trained models
+data/
+models/
