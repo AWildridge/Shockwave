@@ -19,8 +19,10 @@ dependencies:
 
   - ipykernel
   - ipywidgets
+  - jupyter
   - yaml
 
   - scikit-learn
   - pytorch
   - pytorch-cuda=12.4
+  - optuna

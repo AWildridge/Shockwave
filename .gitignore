@@ -1,7 +1,11 @@
 # Build artifacts and data files
 *.pt
 *.npy
+*.npz
 *.pkl
+
+# Jupyter notebooks
+*.ipynb
 
 # Directories storing data and trained models
 data/
