@@ -9,7 +9,7 @@ import torch.nn as nn
 from matplotlib import pyplot as plt
 
 from src import data
-from src.architectures import MaskPredMLP
+from src import architectures
 from src import plotting
 
 # Parse model folder and wandb name
@@ -37,11 +37,12 @@ epochs = config['optimizer'].get('epochs', 20) # Default number of epochs: 20
 datasets_folder = config['dataset'].get('location')
 data_array = np.load(datasets_folder+"/background.npz")["data"]
 
-# Only using one channel for now
-data_array = data_array[:,0,:]
+# Trying to predict the second channel given the first one
+# inputs_array = data_array[:, 0, :]
+# targets_array = data_array[:, 1, :]
 
 #train_dataset, valid_dataset, test_dataset = data.PrepareDatasets(data_array, seed=5138008)
-train_dataset, valid_dataset, test_dataset = data.PrepareIdentityDatasets(data_array, seed=5138008)
+train_dataset, valid_dataset, test_dataset = data.PrepareTwoChannelSimpleDatasets(data_array, seed=5138008)
 
 # Create log file and write first line
 info = open(SAVE_FOLDER+"/model_details.txt", 'w')
@@ -60,7 +61,7 @@ targets_valid = targets_valid.to(DEVICE)
 # Force flash attention to be used (trying it out)
 #with nn.attention.sdpa_kernel(nn.attention.SDPBackend.FLASH_ATTENTION):
 
-model = MaskPredMLP(**config['model']).to(DEVICE)
+model = architectures.MLPBlock(**config['model']).to(DEVICE)
 info.write("Total model params: " + str(sum(p.numel() for p in model.parameters())) + "\n")
 info.write("Trainable params: " + str(sum(p.numel() for p in model.parameters() if p.requires_grad)) + "\n")
 info.write("\n")

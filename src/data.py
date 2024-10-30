@@ -108,3 +108,21 @@ def PrepareIdentityDatasets(dataset, seed=None):
     test_dataset = torch.utils.data.TensorDataset(test_data, test_data)
 
     return train_dataset, valid_dataset, test_dataset
+
+def PrepareTwoChannelSimpleDatasets(dataset, seed=None):
+    train_data, valid_data, test_data = train_valid_test_split(dataset, train_portion=0.8, valid_portion=0.1, test_portion=0.1, seed=seed)
+
+    train_inputs = train_data[:, 0, :]
+    train_targets = train_data[:, 1, :]
+
+    valid_inputs = valid_data[:, 0, :]
+    valid_targets = valid_data[:, 1, :]
+
+    test_inputs = test_data[:, 0, :]
+    test_targets = test_data[:, 1, :]
+
+    train_dataset = torch.utils.data.TensorDataset(torch.tensor(train_inputs, dtype=torch.float32), torch.tensor(train_targets, dtype=torch.float32))
+    valid_dataset = torch.utils.data.TensorDataset(torch.tensor(valid_inputs, dtype=torch.float32), torch.tensor(valid_targets, dtype=torch.float32))
+    test_dataset = torch.utils.data.TensorDataset(torch.tensor(test_inputs, dtype=torch.float32), torch.tensor(test_targets, dtype=torch.float32))
+
+    return train_dataset, valid_dataset, test_dataset
