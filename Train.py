@@ -42,7 +42,8 @@ data_array = np.load(datasets_folder+"/background.npz")["data"]
 # targets_array = data_array[:, 1, :]
 
 #train_dataset, valid_dataset, test_dataset = data.PrepareDatasets(data_array, seed=5138008)
-train_dataset, valid_dataset, test_dataset = data.PrepareTwoChannelSimpleDatasets(data_array, seed=5138008)
+#train_dataset, valid_dataset, test_dataset = data.PrepareTwoChannelSimpleDatasets(data_array, seed=5138008)
+train_dataset, valid_dataset, test_dataset = data.PrepareFFTDatasets(data_array, seed=5138008)
 
 # Create log file and write first line
 info = open(SAVE_FOLDER+"/model_details.txt", 'w')

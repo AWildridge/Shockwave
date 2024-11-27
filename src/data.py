@@ -1,5 +1,6 @@
 import numpy as np
 from numpy.random import default_rng
+from scipy import fft
 import torch
 from torch.utils.data import Dataset
 
@@ -124,5 +125,23 @@ def PrepareTwoChannelSimpleDatasets(dataset, seed=None):
     train_dataset = torch.utils.data.TensorDataset(torch.tensor(train_inputs, dtype=torch.float32), torch.tensor(train_targets, dtype=torch.float32))
     valid_dataset = torch.utils.data.TensorDataset(torch.tensor(valid_inputs, dtype=torch.float32), torch.tensor(valid_targets, dtype=torch.float32))
     test_dataset = torch.utils.data.TensorDataset(torch.tensor(test_inputs, dtype=torch.float32), torch.tensor(test_targets, dtype=torch.float32))
+
+    return train_dataset, valid_dataset, test_dataset
+
+def PrepareFFTDatasets(dataset, seed=None):
+    train_data, valid_data, test_data = train_valid_test_split(dataset, train_portion=0.8, valid_portion=0.1, test_portion=0.1, seed=seed)
+
+    train_inputs = torch.tensor(train_data, dtype=torch.float32)
+    train_targets = torch.tensor(np.abs(fft.rfft(train_data)[:, :, :-1]), dtype=torch.float32)
+
+    valid_inputs = torch.tensor(valid_data, dtype=torch.float32)
+    valid_targets = torch.tensor(np.abs(fft.rfft(valid_data)[:, :, :-1]), dtype=torch.float32)
+
+    test_inputs = torch.tensor(test_data, dtype=torch.float32)
+    test_targets = torch.tensor(np.abs(fft.rfft(test_data)[:, :, :-1]), dtype=torch.float32)
+
+    train_dataset = torch.utils.data.TensorDataset(train_inputs, train_targets)
+    valid_dataset = torch.utils.data.TensorDataset(valid_inputs, valid_targets)
+    test_dataset = torch.utils.data.TensorDataset(test_inputs, test_targets)
 
     return train_dataset, valid_dataset, test_dataset
